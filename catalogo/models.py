@@ -50,6 +50,9 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
 
 
+    def display_genre(self):
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+
 class BookInstance(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -100,7 +103,7 @@ class BookInstance(models.Model):
 class Author(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    data_of_birth = models.DateField(null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField('Died', null=True, blank=True)
 
     class Meta:
@@ -110,6 +113,6 @@ class Author(models.Model):
         return reverse('author-detail', args=[str(self.id)])
     
     def __str__(self) -> str:
-        return f'{self.first_name}, {self.last_name00}'
+        return f'{self.first_name}, {self.last_name}'
     
     
