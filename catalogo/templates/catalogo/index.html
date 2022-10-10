@@ -1,0 +1,27 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}
+    Parte Dinâmica 
+{% endblock title %}
+
+
+
+{% block content %}
+
+    <h1>Local Library Home</h1>
+    <p>Bem vindo a LocalLibrary, Website developed by <em>Diego Farias</em> using <em>Django Framework</em></p>
+    <h2>Conteúdo dinâmico</h2>
+    <p>A biblioteca tem as seguintes contagens de registros:</p>
+
+    <ul>
+        <li><strong>Livros: </strong>{{ num_books }}</li>
+        <li><strong>Cópias: </strong>{{ num_instances }}</li>
+        <li><strong>Cópias disponíveis: </strong>{{ num_instances_available }}</li>
+        <li><strong>Autores: </strong>{{ num_authors }}</li>
+        <li><strong>Gêneros: </strong>{{ num_genres }}</li>
+        <li><strong>Quantidade achadas: </strong>{{ num_book_search }}</li>
+    </ul>
+{% endblock content %}
+
+    
+
