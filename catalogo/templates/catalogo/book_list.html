@@ -4,8 +4,8 @@
 
     <h1>Lista de livros</h1>
     <ul>
-        {% if list_book %}
-            {% for book in list_book %}
+        {% if book_list %}
+            {% for book in book_list %}
                 <li>
                     {{ book.title }} ({{ book.author }})
                 </li>

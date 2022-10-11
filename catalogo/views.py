@@ -27,11 +27,15 @@ def index(request):
     return render(request, 'catalogo/index.html', context)
 
 
-def book_list(request):
-    list_book = Book.objects.all()
+class BookList(generic.ListView):
+    model = Book
+    context_object_name = 'book_list'
 
-    context = {
-        'list_book': list_book
-    }
+# def book_list(request):
+#     list_book = Book.objects.all()
 
-    return render(request, 'catalogo/book_list.html', context)
+#     context = {
+#         'list_book': list_book
+#     }
+
+#     return render(request, 'catalogo/book_list.html', context)
