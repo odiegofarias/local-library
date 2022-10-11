@@ -1,0 +1,18 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+    <h1>Lista de livros</h1>
+    <ul>
+        {% if list_book %}
+            {% for book in list_book %}
+                <li>
+                    {{ book.title }} ({{ book.author }})
+                </li>
+            {% endfor %}
+    </ul>
+        {% else %}
+            <p>Não tem nenhum livro</p>
+        {% endif %}
+
+{% endblock content %}

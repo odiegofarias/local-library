@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
+from django.views import generic
 
 
 def index(request):
@@ -24,3 +25,13 @@ def index(request):
     }
 
     return render(request, 'catalogo/index.html', context)
+
+
+def book_list(request):
+    list_book = Book.objects.all()
+
+    context = {
+        'list_book': list_book
+    }
+
+    return render(request, 'catalogo/book_list.html', context)
