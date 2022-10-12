@@ -16,7 +16,7 @@ def index(request):
     request.session['num_visits'] = num_visits + 1
 
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
-    num_book_search = Book.objects.filter(title__icontains='e').count()
+    num_book_search = Book.objects.filter(title__icontains='a').count()
     print(num_book_search)
     num_authors = Author.objects.count()
 
