@@ -16,6 +16,12 @@
             <div class="col-sm-2">
                 {% block sidebar %}
                     <ul class="sidebar-nav">
+                        {% if user.is_authenticated %}
+                            <li>Olá, {{ user.get_username }}</li>
+                            <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}" class="btn btn-primary">Login</a></li>
+                        {% endif %}
                         <li><a href="{% url 'catalogo:index' %}">Página inicial</a></li>
                         <li><a href="{% url 'catalogo:books' %}">Todos os livros</a></li>
                         <li><a href="{% url 'catalogo:authors' %}">Todos os autores</a></li>
