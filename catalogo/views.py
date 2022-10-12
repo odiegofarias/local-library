@@ -1,5 +1,6 @@
+from http.client import REQUEST_TIMEOUT
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from .models import *
 from django.views import generic
 
@@ -30,6 +31,7 @@ def index(request):
 class BookList(generic.ListView):
     model = Book
     context_object_name = 'book_list'
+    paginate_by = 6
 
 # def book_list(request):
 #     list_book = Book.objects.all()
@@ -39,3 +41,44 @@ class BookList(generic.ListView):
 #     }
 
 #     return render(request, 'catalogo/book_list.html', context)
+
+
+# class BookDetailView(generic.DetailView):
+#     model = Book
+#     context_object_name = 'book_detail'
+
+
+def book_detail_view(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    return render(
+        request,
+        'catalogo/book_detail.html',
+        {'book': book},
+    )
+
+
+class AuthorsList(generic.ListView):
+    model = Author
+    context_object_name = 'author_list'
+
+
+# def authors_list_view(request):
+#     books = Book.objects.all()
+#     authors = Author.objects.all()
+
+#     context = {
+#         'books': books,
+#         'authors': authors,
+#     }
+
+#     return render(
+#         request,
+#         'catalogo/author_list.html',
+#         context,
+#     )
+
+class AuthorsDetail(generic.DetailView):
+    model = Author
+
+
+
