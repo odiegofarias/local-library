@@ -1,10 +1,11 @@
-from http.client import REQUEST_TIMEOUT
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from .models import *
 from django.views import generic
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+@login_required(login_url="login", redirect_field_name="next")
 def index(request):
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
@@ -54,6 +55,7 @@ class BookList(generic.ListView):
 #     context_object_name = 'book_detail'
 
 
+
 def book_detail_view(request, pk):
     book = get_object_or_404(Book, pk=pk)
     return render(
@@ -63,7 +65,9 @@ def book_detail_view(request, pk):
     )
 
 
-class AuthorsList(generic.ListView):
+class AuthorsList(LoginRequiredMixin, generic.ListView):
+    login_url = 'login'
+    redirect_field_name = 'next'
     model = Author
     context_object_name = 'author_list'
 
