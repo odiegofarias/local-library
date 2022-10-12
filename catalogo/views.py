@@ -11,10 +11,15 @@ def index(request):
     num_genres = Genre.objects.all().count()
     # Pegando as instancias com status "A"
 
+    # Pegando as sessions
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
     num_instances_available = BookInstance.objects.filter(status__exact='a').count()
     num_book_search = Book.objects.filter(title__icontains='e').count()
     print(num_book_search)
     num_authors = Author.objects.count()
+
 
     context = {
         'num_books': num_books,
@@ -23,6 +28,7 @@ def index(request):
         'num_authors': num_authors,
         'num_genres': num_genres,
         'num_book_search': num_book_search,
+        'num_visits': num_visits,
     }
 
     return render(request, 'catalogo/index.html', context)
