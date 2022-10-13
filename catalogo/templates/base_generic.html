@@ -18,6 +18,7 @@
                     <ul class="sidebar-nav">
                         {% if user.is_authenticated %}
                             <li>Olá, {{ user.get_username }}</li>
+                            <li><a href="{% url 'catalogo:my_borrowed' %}">Meus empréstimos</a></li>
                             <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
                         {% else %}
                             <li><a href="{% url 'login' %}" class="btn btn-primary">Login</a></li>

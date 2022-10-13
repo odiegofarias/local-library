@@ -70,11 +70,17 @@ class BookInstance(models.Model):
     #  Pessoa que pegou o empréstimo do livro
     borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
+    class Meta:
+        permissions = [
+            ("can_mark_returned", "Set book as returned"),
+        ]
 
     @property
     def is_overdue(self):
         """Determina se o livro está vencido com base na data de vencimento e na data atual."""
-        return bool(self.due_back and date.today() > self.due_back)
+        if self.due_back and date.today() > self.due_back:
+            return True
+        return False
 
     # status de emprestimo do livro
     LOAN_STATUS = (

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from .models import *
 from django.views import generic
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 @login_required(login_url="login", redirect_field_name="next")
@@ -90,5 +90,20 @@ class AuthorsList(LoginRequiredMixin, generic.ListView):
 class AuthorsDetail(generic.DetailView):
     model = Author
 
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    model = BookInstance
+    template_name = 'catalogo/bookinstance_list_borrowed_user.html'
+    paginate_by = 6
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(
+            borrower=self.request.user
+        ).filter(status__exact='o').order_by('due_back')
+
+
+class TodosEmprestimosView(PermissionRequiredMixin, generic.ListView):
+    permission_required = 'catalogo'
+        
 
 
