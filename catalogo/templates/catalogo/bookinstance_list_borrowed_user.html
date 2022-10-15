@@ -4,9 +4,9 @@
 {% block content %}
 
     <h1>Livros emprestados</h1>
-    {% if bookinstance_list %}
+    {% if book_list_staff and user.is_staff %}
         <ul>
-            {% for bookinst in bookinstance_list %}
+            {% for bookinst in book_list_staff %}
                 <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
                     <a href="{% url 'catalogo:book_detail' bookinst.book.pk %}">
                         {{ bookinst.book.title }}
@@ -14,8 +14,18 @@
                 </li>
             {% endfor %}
         </ul>
+    {% elif book_list_user and not user.is_staff %}
+    <ul>
+        {% for bookinst in book_list_user %}
+            <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+                <a href="{% url 'catalogo:book_detail' bookinst.book.pk %}">
+                    {{ bookinst.book.title }}
+                </a>({{ bookinst.due_back }})
+            </li>
+        {% endfor %}
+    </ul>
     {% else %}
-        <p>Não temos livros emprestados</p>
+        <h3>Não temos cópias emprestadas</h3>
     {% endif %}
 
 {% endblock content %}

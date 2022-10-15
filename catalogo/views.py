@@ -3,6 +3,7 @@ from .models import *
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 @login_required(login_url="login", redirect_field_name="next")
@@ -94,12 +95,26 @@ class AuthorsDetail(generic.DetailView):
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     model = BookInstance
     template_name = 'catalogo/bookinstance_list_borrowed_user.html'
-    paginate_by = 6
+    paginate_by = 10
 
-    def get_queryset(self):
-        return BookInstance.objects.filter(
-            borrower=self.request.user
-        ).filter(status__exact='o').order_by('due_back')
+    def get_queryset(self, *args, **kwargs):
+        # return BookInstance.objects.filter(
+        #     borrower=self.request.user
+        # ).filter(status__exact='o').order_by('due_back')
+        return BookInstance.objects.all()
+
+
+@login_required(login_url="login", redirect_field_name="next")
+def livro_emprestado(request):
+    book_list_user = BookInstance.objects.filter(borrower=request.user).filter(status__exact='o').order_by('due_back')
+    book_list_staff = BookInstance.objects.all()
+
+    context = {
+        'book_list_staff': book_list_staff,
+        'book_list_user': book_list_user,
+    }
+
+    return render(request, 'catalogo/bookinstance_list_borrowed_user.html', context)
 
 
 class TodosEmprestimosView(PermissionRequiredMixin, generic.ListView):
