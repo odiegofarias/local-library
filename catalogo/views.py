@@ -1,9 +1,12 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
+import datetime
+from catalogo.forms import RenewBookForm
+from django.contrib.auth.decorators import permission_required
 
 
 @login_required(login_url="login", redirect_field_name="next")
@@ -121,4 +124,27 @@ class TodosEmprestimosView(PermissionRequiredMixin, generic.ListView):
     permission_required = 'catalogo'
         
 
+@permission_required('catalogo.can_mark_returned')
+def renew_book_librarian(request, pk):
+    book_instance = BookInstance.objects.get(pk=pk)
+
+    if request.method == "POST":
+        form = RenewBookForm(request.POST)
+
+        if form.is_valid():
+            book_instance.due_back = form.cleaned_data['due_back']
+            book_instance.save()
+
+            return redirect('catalogo:my_borrowed')
+
+    else:
+        proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
+        form = RenewBookForm(initial={'due_back': proposed_renewal_date})
+
+    context = {
+        'form': form,
+        'book_instance': book_instance
+    }
+    
+    return render(request, 'catalogo/book_renew_librarian.html', context)
 
