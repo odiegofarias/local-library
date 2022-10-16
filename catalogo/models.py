@@ -41,6 +41,11 @@ class Book(models.Model):
         Genre,
         help_text='Escolha o gênero do livro',
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
 
     def __str__(self) -> str:
         return self.title

@@ -3,6 +3,10 @@
 {% block content %}
 
     <h1>Title: {{ book.title }}</h1>
+    <hr>
+    <a href="{% url 'catalogo:book_update' book.pk %}">Editar</a>
+    <a href="{% url 'catalogo:book_delete' book.pk %}">Excluir</a>
+    <hr>
 
     <p><strong>Autor: </strong><a href="">{{ book.author }}</a></p>
     <p><strong>Sumário: </strong>{{ book.summary }}</p>

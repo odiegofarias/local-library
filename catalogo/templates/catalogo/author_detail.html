@@ -3,6 +3,9 @@
 {% block content %}
 
     <h1>Nome: {{ author.first_name }} {{ author.last_name }}</h1>
+    <a href="{% url 'catalogo:author_update' author.pk %}">Editar</a>
+    <a href="{% url 'catalogo:author_delete' author.pk %}">Excluir</a>
+    <hr>
     <h3>Data de aniversário: {{ author.date_of_birth|date:"d/M/Y" }}</h3>
     {% if author.date_of_death %}
         <h3>Data de sua morte: {{ author.date_of_death|date:"d/M/Y" }}</h3>

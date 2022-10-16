@@ -7,6 +7,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 import datetime
 from catalogo.forms import RenewBookForm
 from django.contrib.auth.decorators import permission_required
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 
 
 @login_required(login_url="login", redirect_field_name="next")
@@ -42,7 +44,7 @@ def index(request):
 class BookList(generic.ListView):
     model = Book
     context_object_name = 'book_list'
-    paginate_by = 6
+    paginate_by = 12
 
 # def book_list(request):
 #     list_book = Book.objects.all()
@@ -147,4 +149,38 @@ def renew_book_librarian(request, pk):
     }
     
     return render(request, 'catalogo/book_renew_librarian.html', context)
+
+
+class AuthorCreate(LoginRequiredMixin, CreateView):
+    model = Author
+    fields = '__all__'
+    initial = {'date_of_death': '05/01/2018'}
+    success_url = reverse_lazy('catalogo:authors')
+
+
+class AuthorUpdate(LoginRequiredMixin, UpdateView):
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    success_url = reverse_lazy('catalogo:authors')
+
+class AuthorDelete(LoginRequiredMixin, DeleteView):
+    model = Author
+    success_url = reverse_lazy('catalogo:authors')
+
+
+class BookCreate(LoginRequiredMixin, CreateView):
+    model = Book
+    fields = '__all__'
+    success_url = reverse_lazy('catalogo:books')
+
+
+class BookUpdate(LoginRequiredMixin, UpdateView):
+    model = Book
+    fields = '__all__'
+    success_url = reverse_lazy('catalogo:books')
+
+
+class BookDelete(LoginRequiredMixin, DeleteView):
+    model = Book
+    success_url = reverse_lazy('catalogo:books')
 
