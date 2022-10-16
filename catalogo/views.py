@@ -71,11 +71,13 @@ def book_detail_view(request, pk):
     )
 
 
-class AuthorsList(LoginRequiredMixin, generic.ListView):
-    login_url = 'login'
-    redirect_field_name = 'next'
+class AuthorsList(generic.ListView):
+    # Coloque o LoginRequiredMixin à esquerda da herança
+    # login_url = 'login'
+    # redirect_field_name = 'next'
     model = Author
     context_object_name = 'author_list'
+    paginate_by = 5
 
 
 # def authors_list_view(request):
