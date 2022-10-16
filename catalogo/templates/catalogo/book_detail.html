@@ -3,6 +3,7 @@
 {% block content %}
 
     <h1>Title: {{ book.title }}</h1>
+    <p>{{ book.get_absolute_url }}</p>
     <hr>
     <a href="{% url 'catalogo:book_update' book.pk %}">Editar</a>
     <a href="{% url 'catalogo:book_delete' book.pk %}">Excluir</a>

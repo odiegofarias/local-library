@@ -50,11 +50,6 @@ class Book(models.Model):
     def __str__(self) -> str:
         return self.title
 
-    
-    def get_absolute_url(self):
-        return reverse('book-detail', args=[str(self.id)])
-
-
     def display_genre(self):
         return ', '.join(genre.name for genre in self.genre.all()[:3])
 
@@ -74,11 +69,6 @@ class BookInstance(models.Model):
     due_back = models.DateField(null=True, blank=True)
     #  Pessoa que pegou o empréstimo do livro
     borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-
-    class Meta:
-        permissions = [
-            ("can_mark_returned", "Set book as returned"),
-        ]
 
     @property
     def is_overdue(self):
@@ -119,10 +109,8 @@ class Author(models.Model):
 
     class Meta:
         ordering = ['first_name', 'last_name']
-
-    def get_absolute_url(self):
-        return reverse('author-detail', args=[str(self.id)])
-    
+        permissions = (("can_mark_returned", "Set book as returned"), )
+ 
     def __str__(self) -> str:
         return f'{self.first_name}, {self.last_name}'
     

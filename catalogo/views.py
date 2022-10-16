@@ -3,12 +3,12 @@ from .models import *
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.admin.views.decorators import staff_member_required
 import datetime
 from catalogo.forms import RenewBookForm
 from django.contrib.auth.decorators import permission_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+
 
 
 @login_required(login_url="login", redirect_field_name="next")
