@@ -1,4 +1,6 @@
+from cgi import test
 import datetime
+from multiprocessing.connection import Client
 
 from django.test import TestCase
 from django.urls import reverse
@@ -61,10 +63,9 @@ class AuthorListViewTest(TestCase):
 class LoadnedBookInstancesByUserListViewTest(TestCase):
     def setUp(self) -> None:
         # cria dois usuários
-        self.login_url = reverse('login')
         test_user1 = User.objects.create(
             username='testuser1',
-            password='qweqweqweqwe'
+            password='tub4f5p2',
         )
         test_user2 = User.objects.create(
             username='testuser2',
@@ -110,9 +111,27 @@ class LoadnedBookInstancesByUserListViewTest(TestCase):
                 status=status,
             )
 
+
+
     def test_redirect_se_nao_estiver_logado(self):
         response = self.client.get(reverse('catalogo:my_borrowed'))
 
         self.assertRedirects(response, '/accounts/login/?next=/catalogo/mybooks/')
     
-    
+
+
+
+
+class LoginTest(TestCase):
+    def test_login_como_anonimo_redireciona_para_url_login(self):
+        url = self.client.get(reverse('catalogo:index'))
+        self.assertRedirects(url, "/accounts/login/?next=/catalogo/")
+
+    def test_apenas_usuarios_atenticados(self):
+        user = User.objects.create_user(username='teste', password='teste_pass')
+        self.client.force_login(user=user)
+        url = self.client.get(reverse('catalogo:index'))
+        
+        self.assertEqual(url.status_code, 200)
+        self.assertTemplateUsed(url, 'catalogo/index.html')
+        self.assertIn('Local Library Home', url.content.decode('utf-8'))
